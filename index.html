@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Política de Privacidad — Agente Facturas JAGI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font-family: Georgia, 'Times New Roman', serif; max-width: 720px; margin: 40px auto; padding: 0 20px; line-height: 1.6; color: #222; }
+  h1 { font-size: 28px; margin-bottom: 4px; }
+  h2 { font-size: 19px; margin-top: 36px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+  .meta { color: #666; font-size: 14px; margin-bottom: 32px; }
+  .en { color: #555; font-style: italic; border-top: 1px dashed #ccc; padding-top: 10px; margin-top: 10px; }
+  code { background: #f2f2f2; padding: 1px 5px; border-radius: 3px; font-size: 0.95em; }
+  ul { padding-left: 22px; }
+  li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<h1>Política de Privacidad</h1>
+<p class="meta">Agente Facturas JAGI — JAGI Industry SAS<br>Vigente desde: 2 de septiembre de 2026</p>
+
+<h2>1. Qué es este documento</h2>
+<p>Esta política explica qué datos accede Agente Facturas JAGI a través de la API de Gmail de Google, para qué los usa y qué no hace con ellos. El agente es una herramienta de uso interno: no se distribuye a terceros, no tiene usuarios fuera de JAGI Industry SAS, y las únicas cuentas de correo que autoriza son las de la propia empresa.</p>
+
+<h2>2. Responsable del tratamiento</h2>
+<p>JAGI Industry SAS es la titular de las cuentas de correo, del software y de los datos que este documento describe. No hay un tercero desarrollador ni un proveedor externo con acceso a estos datos.</p>
+
+<h2>3. Qué cuentas autoriza el agente</h2>
+<p>Tres cuentas de Gmail, una por cada razón social de la empresa: Distribuidora de Accesorios Giraldo SAS, Jaime Wilson Giraldo Giraldo, y Jagi Industry SAS. Se usan exclusivamente para recibir facturas electrónicas de proveedores.</p>
+
+<h2>4. Qué permiso pide y por qué</h2>
+<p>El agente solicita un único permiso de Google, de solo lectura: <code>https://www.googleapis.com/auth/gmail.readonly</code> (lectura de correo, sin permiso de envío ni de borrado). Con ese permiso busca en cada bandeja los correos que traen adjunto un documento DIAN (XML de factura electrónica UBL 2.1, o su PDF asociado). No abre, indexa ni almacena ningún otro correo de la bandeja.</p>
+
+<h2>5. Qué hace con los datos extraídos</h2>
+<ul>
+  <li>Descarga los adjuntos (XML/PDF/ZIP) y los guarda dentro del propio servidor de la empresa, nunca en un servicio de terceros.</li>
+  <li>Extrae del XML los datos propios de una factura: NIT del comprador y del proveedor, número de factura, fecha, valores.</li>
+  <li>Registra esa metadata en una base de datos interna, para el flujo de aprobación de facturas por parte del personal contable.</li>
+  <li>Marca el correo como procesado, para no volver a descargarlo.</li>
+</ul>
+
+<h2>6. Qué NO hace el agente</h2>
+<ul>
+  <li>No comparte, vende ni cede el contenido del correo a ningún tercero.</li>
+  <li>No usa los datos para publicidad, perfilado ni entrenamiento de modelos.</li>
+  <li>No usa el permiso <code>gmail.readonly</code> para enviar, responder ni eliminar correos — es de solo lectura.</li>
+  <li>No accede a correos que no coincidan con el patrón de factura electrónica.</li>
+  <li>No hay personas leyendo el correo manualmente — solo el proceso automatizado descrito arriba.</li>
+</ul>
+
+<h2>7. El correo de aprobación que sí se envía — y por qué no usa este permiso</h2>
+<p>Cuando una factura queda asignada a un responsable, el agente sí envía un correo desde la misma cuenta de la empresa compradora, con un enlace para confirmarla o rechazarla. Ese envío <strong>no</strong> pasa por la API de Gmail ni por el permiso <code>gmail.readonly</code>: usa SMTP con una Contraseña de Aplicación de Google, un mecanismo independiente que la propia cuenta autoriza por fuera de este consentimiento OAuth. Por eso el agente nunca solicita un permiso de envío (<code>gmail.send</code> o <code>gmail.modify</code>).</p>
+
+<h2>8. Cumplimiento de la Política de Datos de Usuario de Google</h2>
+<p>El uso que Agente Facturas JAGI hace de la información recibida a través de las APIs de Google se ajusta a la Política de Datos de Usuario de los Servicios de API de Google, incluidos los requisitos de Uso Limitado: los datos obtenidos por el permiso <code>gmail.readonly</code> se usan exclusivamente para la función de clasificación y archivo de facturas descrita en este documento, no se transfieren a terceros salvo cuando lo exige la ley, y no se usan para publicidad.</p>
+<p class="en">Agente Facturas JAGI's use of information received from Google APIs adheres to the Google API Services User Data Policy, including the Limited Use requirements: data obtained through the <code>gmail.readonly</code> scope is used solely to provide the invoice-classification feature described in this document, is not transferred to third parties except as required by law, and is not used for advertising purposes.</p>
+
+<h2>9. Conservación y seguridad</h2>
+<p>Los adjuntos descargados y la base de datos viven en un equipo de la propia empresa, dentro de la red interna, sin exposición pública. El acceso al panel de administración requiere usuario y contraseña, y cada acción sobre una factura queda en un registro de auditoría de solo escritura. Los tokens de autorización de Gmail se guardan localmente y solo se usan para renovar el acceso de lectura.</p>
+
+<h2>10. Revocar el acceso</h2>
+<p>Cualquiera de las tres cuentas puede revocar el permiso del agente en cualquier momento desde <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>, sin necesidad de avisar a JAGI Industry SAS.</p>
+
+<h2>11. Cambios a esta política</h2>
+<p>Si el alcance del agente cambia, esta página se actualiza antes de que ese cambio entre en producción.</p>
+
+<p style="margin-top:40px;border-top:1px solid #ddd;padding-top:16px;color:#666;font-size:14px;">
+Contacto — Departamento de Sistemas, JAGI Industry SAS<br>
+facturas.jagicaps@gmail.com
+</p>
+
+</body>
+</html>
